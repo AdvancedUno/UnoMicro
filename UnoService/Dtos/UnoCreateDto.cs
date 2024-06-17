@@ -1,13 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace UnoService.Models
+namespace UnoService.Dtos
 {
-    public class Uno
+    public class UnoCreateDto
     {
-        [Key]
-        [Required]
-        public int Id {get;set;}
-        
         [Required]
         public string Name {get;set;}
 
