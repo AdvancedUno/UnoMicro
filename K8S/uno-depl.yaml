@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uno-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unoservice
+  template:
+    metadata:
+      labels:
+        app: unoservice
+    spec:
+      containers:
+        - name: unoservice
+          image: advanceduno/unoservice:latest
+
+
