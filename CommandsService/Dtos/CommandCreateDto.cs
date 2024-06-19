@@ -10,6 +10,4 @@ namespace CommandsService.Dtos
         [Required]
         public string CommandLine { get; set; }
     }
-
-
 }
