@@ -16,4 +16,40 @@ spec:
         - name: unoservice
           image: advanceduno/unoservice:latest
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: uno-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: unoservice
+  ports:
+  - name: unoservice
+    port: 8080
+    targetPort: 8080
 
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#     name: unoservice
+# spec:
+#   replicas: 1
+#   template:
+#     metadata:
+#       labels:
+#         app: unoservice
+#     spec:
+#       containers:
+#       - name: unoservice
+#         image: advanceduno/unoservice:latest
+#         ports:
+#         - containerPort: 80
+#         env:
+#         - name: ASPNETCORE_URLS
+#           value: http://*:80
+#   selector:
+#     matchLabels:
+#       app: unoservice

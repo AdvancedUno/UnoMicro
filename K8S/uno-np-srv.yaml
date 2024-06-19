@@ -9,5 +9,18 @@ spec:
   ports:
     - name: unoservice
       protocol: TCP
-      port: 80
+      port: 8080
       targetPort: 8080
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: unonpservice-srv
+# spec:
+#   type: NodePort
+#   ports:
+#   - port: 80
+#     targetPort: 80
+#     nodePort: 32001
+#   selector:
+#     app: unonpservice-srv
