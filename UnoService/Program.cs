@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using UnoService.Data;
+using UnoService.SyncDataService.Http;
+using UnoService.SyncDataService.HttpContext;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
@@ -11,6 +15,11 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMe
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUnoRepo, UnoRepo>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+
+var Configuration = builder.Configuration;
+Console.WriteLine($"--> CommandService Endpoint {Configuration["CommandService"]}");
+
 
 // Build the application
 var app = builder.Build();

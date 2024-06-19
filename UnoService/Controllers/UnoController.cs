@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using UnoService.Data;
 using UnoService.Dtos;
 using UnoService.Models;
+using UnoService.SyncDataService.HttpContext;
 
 namespace UnoService.Controllers
 {
@@ -12,11 +13,17 @@ namespace UnoService.Controllers
     {
         private readonly IUnoRepo _repository;
         private readonly IMapper _mapper;
+        private readonly ICommandDataClient _commandDataClient;
 
-        public UnoController(IUnoRepo repository, IMapper mapper)
+        public UnoController(
+            IUnoRepo repository, 
+            IMapper mapper,
+            ICommandDataClient commandDataClient
+            )
         {
             _repository = repository;
             _mapper = mapper;
+            _commandDataClient = commandDataClient;
         }
 
         [HttpGet]
@@ -41,7 +48,7 @@ namespace UnoService.Controllers
         }
 
         [HttpPost]
-        public ActionResult<UnoReadDto> CreateUno(UnoCreateDto unoCreateDto)
+        public async Task<ActionResult<UnoReadDto>> CreateUno(UnoCreateDto unoCreateDto)
         {
             var unoModel = _mapper.Map<Uno>(unoCreateDto);
 
@@ -49,6 +56,15 @@ namespace UnoService.Controllers
             _repository.SaveChange();
 
             var unoReadDto = _mapper.Map<UnoReadDto>(unoModel);
+
+            try
+            {
+                await _commandDataClient.SendUnotToCommand(unoReadDto);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"--> Could not send synchronously : {ex.Message}");
+            }
 
             return CreatedAtRoute(nameof(GetUnoById), new {Id = unoReadDto.Id}, unoReadDto);
         }
