@@ -15,7 +15,7 @@ namespace CommandsService.Models
         public string CommandLine { get; set; }
 
         [Required]
-        public string UnoId { get; set; }
+        public int UnoId { get; set; }
         public Uno Uno { get; set; } // navigation prop
     }
 }
