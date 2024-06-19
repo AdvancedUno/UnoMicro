@@ -33,68 +33,68 @@ UnoMicro is a microservice built using C# and .NET 8, designed to demonstrate mi
 
 ### Clone the Repository
 
-\`\`\`bash
+```bash
 git clone https://github.com/yourusername/UnoMicro.git
 cd UnoMicro
-\`\`\`
+```
 
 ### Build and Run with Docker
 
 1. **Build Docker Image**
 
-   \`\`\`bash
+   ```bash
    docker build -t unomicro:latest .
-   \`\`\`
+  ```
 
 2. **Run Docker Container**
 
-   \`\`\`bash
-   docker run -d -p 80:80 -p 443:443 -p 5000:5000 -p 5001:5001 --name unomicro unomicro:latest
-   \`\`\`
+   ```bash
+   docker run -d -p 8000:8080 -p 443:443 -p 5000:5000 -p 5001:5001 --name unomicro unomicro:latest
+  ```
 
 ### Deploy to Kubernetes
 
 1. **Create Kubernetes Secret for SQL Server Password**
 
-   \`\`\`bash
+   ```bash
    kubectl create secret generic mssql-secret --from-literal=SA_PASSWORD='StrongPassw0rd!'
-   \`\`\`
+   ```
 
 2. **Apply Kubernetes Manifests**
 
-   \`\`\`bash
+   ```bash
    kubectl apply -f kubernetes/
-   \`\`\`
+   ```
 
 3. **Verify Deployment**
 
-   \`\`\`bash
+   ```bash
    kubectl get pods
    kubectl get services
-   \`\`\`
+   ```
 
 ### Configuration
 
 Ensure your \`appsettings.Production.json\` is correctly set up:
 
-\`\`\`json
+```json
 {
     "CommandService": "http://commands-clusterip-srv:8080/api/c/uno/",
     "ConnectionStrings": {
         "UnoConn": "Server=mssql-clusterip-srv,1433;Initial Catalog=unodb;User ID=sa;Password=StrongPassw0rd!"
     }
 }
-\`\`\`
+```
 
 ### Environment Variables
 
 Ensure you have set the environment variable for the production environment in your Kubernetes deployment YAML:
 
-\`\`\`yaml
+```yaml
 env:
   - name: ASPNETCORE_ENVIRONMENT
     value: "Production"
-\`\`\`
+```
 
 
 ## Usage
@@ -108,17 +108,17 @@ env:
 
 To apply migrations, ensure you have the \`dotnet-ef\` tool installed and run:
 
-\`\`\`bash
+```bash
 dotnet tool install --global dotnet-ef
 dotnet ef migrations add InitialMigration
 dotnet ef database update
-\`\`\`
+```
 
 ### Program.cs Configuration
 
 Ensure your \`Program.cs\` reads the configuration correctly:
 
-\`\`\`csharp
+```csharp
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
@@ -172,7 +172,7 @@ app.MapControllers();
 PrepDb.PrepPopulation(app);
 
 app.Run();
-\`\`\`
+```
 
 ## Contributing
 
