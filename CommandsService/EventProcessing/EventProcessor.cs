@@ -17,7 +17,16 @@ namespace CommandsService.EventProcessing
         }
         public void ProcessEvent(string message)
         {
-            throw new NotImplementedException();
+            var eventType = DetermineEvent(message);
+
+            switch(eventType)
+            {
+                case EventType.UnoPublished:
+                    // Todo
+                    break;
+                default:
+                    break;
+            }
         }
 
         private EventType DetermineEvent(string notificationMessage){
