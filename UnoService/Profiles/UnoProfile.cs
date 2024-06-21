@@ -11,6 +11,7 @@ namespace UnoService.Profiles
             // Source -> Target
             CreateMap<Uno, UnoReadDto>();
             CreateMap<UnoCreateDto, Uno>();
+            CreateMap<UnoReadDto, UnoPublishedDto>();
 
         }
     }

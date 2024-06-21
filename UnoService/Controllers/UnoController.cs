@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using UnoService.AsyncDataServices;
 using UnoService.Data;
 using UnoService.Dtos;
 using UnoService.Models;
@@ -10,20 +11,23 @@ namespace UnoService.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class UnoController: ControllerBase
-    {
+    {   
         private readonly IUnoRepo _repository;
         private readonly IMapper _mapper;
         private readonly ICommandDataClient _commandDataClient;
+        private readonly IMessageBusClient _messageBusClient;
 
         public UnoController(
             IUnoRepo repository, 
             IMapper mapper,
-            ICommandDataClient commandDataClient
+            ICommandDataClient commandDataClient,
+            IMessageBusClient messageBusClient
             )
         {
             _repository = repository;
             _mapper = mapper;
             _commandDataClient = commandDataClient;
+            _messageBusClient = messageBusClient;
         }
 
         [HttpGet]
@@ -57,6 +61,7 @@ namespace UnoService.Controllers
 
             var unoReadDto = _mapper.Map<UnoReadDto>(unoModel);
 
+            // Send Sync Message
             try
             {
                 await _commandDataClient.SendUnotToCommand(unoReadDto);
@@ -64,6 +69,18 @@ namespace UnoService.Controllers
             catch(Exception ex)
             {
                 Console.WriteLine($"--> Could not send synchronously : {ex.Message}");
+            }
+
+            //Send Async Message
+            try
+            {
+                var unoPublishedDto = _mapper.Map<UnoPublishedDto>(unoReadDto);
+                unoPublishedDto.Event = "Uno_Published";
+                _messageBusClient.PublishNewUno(unoPublishedDto);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"--> Could not send asynchronously : {ex.Message}");
             }
 
             return CreatedAtRoute(nameof(GetUnoById), new {Id = unoReadDto.Id}, unoReadDto);

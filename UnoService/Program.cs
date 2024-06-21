@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using UnoService.AsyncDataServices;
 using UnoService.Data;
 using UnoService.SyncDataService.Http;
 using UnoService.SyncDataService.HttpContext;
@@ -17,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUnoRepo, UnoRepo>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
 
 var Configuration = builder.Configuration;
@@ -35,6 +37,7 @@ else
     builder.Services.AddDbContext<AppDbContext>(opt => 
         opt.UseInMemoryDatabase("InMem"));
 }
+
 
 
 // Build the application
