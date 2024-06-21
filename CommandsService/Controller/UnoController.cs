@@ -1,3 +1,6 @@
+using AutoMapper;
+using CommandsService.Data;
+using CommandsService.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommandsService.Controllers
@@ -6,10 +9,25 @@ namespace CommandsService.Controllers
     [ApiController]
     public class UnoController: ControllerBase
     {
-        public UnoController()
+        private readonly ICommandRepo _repository;
+        private readonly IMapper _mapper;
+
+        public UnoController(ICommandRepo repository,  IMapper mapper)
         {
-            
+            _repository = repository;
+            _mapper = mapper;
         }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<UnoReadDto>> GetPlatforms()
+        {
+            Console.WriteLine("--> Getting Unos from CommandsService");
+
+            var unoItems = _repository.GetAllUnos();
+
+            return Ok(_mapper.Map<IEnumerable<UnoReadDto>>(unoItems));
+        }
+
 
         [HttpPost]
         public ActionResult TestInboundConnection()

@@ -10,6 +10,7 @@ namespace CommandsService.Data
         IEnumerable<Uno> GetAllUnos();
         void CreateUno(Uno uno);
         bool UnoExits(int unoId);
+        bool ExternalUnoExist(int externalUnoId);
 
         // ===== Commands =====
         IEnumerable<Command> GetCommandsForUno(int unoId);

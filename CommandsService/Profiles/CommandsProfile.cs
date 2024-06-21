@@ -12,6 +12,8 @@ namespace CommandsService.Profiles
             CreateMap<Uno, UnoReadDto>();
             CreateMap<CommandCreateDto, Command>();
             CreateMap<Command, CommandReadDto>();
+            CreateMap<UnoPublishedDto, Uno>()
+                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

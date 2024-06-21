@@ -30,6 +30,11 @@ namespace CommandsService.Data
             
         }
 
+        public bool ExternalUnoExist(int externalUnoId)
+        {
+            return _context.Unos.Any(p => p.ExternalId == externalUnoId); 
+        }
+
         public IEnumerable<Uno> GetAllUnos()
         {
             return _context.Unos.ToList();
