@@ -27,29 +27,11 @@ spec:
     app: unoservice
   ports:
   - name: unoservice
+    protocol: TCP
     port: 8080
     targetPort: 8080
+  - name: unogrpc
+    protocol: TCP
+    port: 777
+    targetPort: 777
 
-# ---
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#     name: unoservice
-# spec:
-#   replicas: 1
-#   template:
-#     metadata:
-#       labels:
-#         app: unoservice
-#     spec:
-#       containers:
-#       - name: unoservice
-#         image: advanceduno/unoservice:latest
-#         ports:
-#         - containerPort: 80
-#         env:
-#         - name: ASPNETCORE_URLS
-#           value: http://*:80
-#   selector:
-#     matchLabels:
-#       app: unoservice

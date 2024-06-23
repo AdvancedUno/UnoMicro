@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace = "UnoService";
+
+service GrpcUno
+{
+    rpc GetAllUno (GetAllRequest) returns (UnoResponse);
+}
+
+message GetAllRequest
+{
+
+}
+
+message GrpcUnoModel
+{
+    int32 unoId = 1;
+    string name = 2;
+    string publisher = 3;
+}
+
+message UnoResponse
+{
+    repeated GrpcUnoModel uno = 1;
+}

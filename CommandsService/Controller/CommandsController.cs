@@ -63,6 +63,7 @@ namespace CommandsService.Controllers
 
             if(!_repository.UnoExits(unoId))
             {
+                Console.WriteLine("--> Cannot find Uno object");
                 return NotFound();
             }
 

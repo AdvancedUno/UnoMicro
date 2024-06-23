@@ -1,8 +1,10 @@
+using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using UnoService.AsyncDataServices;
 using UnoService.Data;
+using UnoService.SyncDataService.Grpc;
 using UnoService.SyncDataService.Http;
 using UnoService.SyncDataService.HttpContext;
 
@@ -16,6 +18,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUnoRepo, UnoRepo>();
+builder.Services.AddGrpc();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
@@ -42,6 +45,19 @@ else
 
 // Build the application
 var app = builder.Build();
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapGrpcService<GrpcUnoService>();
+
+    endpoints.MapGet("/protos/uno.proto", async context =>
+    {
+        await context.Response.WriteAsync(File.ReadAllText("Protos/uno.proto"));
+    });
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())

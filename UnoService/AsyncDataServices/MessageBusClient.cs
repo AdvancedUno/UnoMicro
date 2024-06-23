@@ -75,6 +75,8 @@ namespace UnoService.AsyncDataServices
                 _channel.Close();
                 _connection.Close();
             }
+
+
         }
 
 
